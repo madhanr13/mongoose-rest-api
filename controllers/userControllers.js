@@ -1,5 +1,17 @@
 const User = require("../models/userModels.js");
 
+const fetch = async (req, res) => {
+  try {
+    const users = await User.find({});
+    if (users.length === 0) {
+      res.status(404).json({ error: "no users found" });
+    }
+    return res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 const create = async (req, res) => {
   try {
     const userData = new User(req.body);
@@ -12,18 +24,6 @@ const create = async (req, res) => {
     res.status(200).json(savedUser);
   } catch (error) {
     res.status(404).json({ error: "Something went wrong" });
-  }
-};
-
-const fetch = async (req, res) => {
-  try {
-    const users = await User.find({});
-    if (users.length === 0) {
-      res.status(404).json({ error: "no users found" });
-    }
-    return res.status(200).json(users);
-  } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
   }
 };
 
